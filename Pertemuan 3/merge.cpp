@@ -2,107 +2,113 @@
 #include <vector>
 using namespace std;
 
-// Fungsi untuk menggabungkan dua subarray yang sudah terurut
+// =======================
+// Fungsi untuk menggabungkan dua subarray terurut (proses merge)
+// =======================
 void merge(vector<int>& arr, int left, int mid, int right) {
-   
-    // Menghitung ukuran dua subarray yang akan digabungkan
-    int n1 = mid - left + 1;  // Ukuran subarray kiri
-    int n2 = right - mid;     // Ukuran subarray kanan
+    // Hitung ukuran dua subarray yang akan digabung
+    int n1 = mid - left + 1;  // Banyak elemen di sisi kiri
+    int n2 = right - mid;     // Banyak elemen di sisi kanan
 
-    // Membuat array sementara untuk menyimpan kedua subarray
+    // Buat dua array sementara untuk menyimpan data kiri dan kanan
     vector<int> L(n1), R(n2);
 
-    // Menyalin data ke array sementara L[] (kiri)
+    // Salin elemen ke array kiri (L)
     for (int i = 0; i < n1; i++)
         L[i] = arr[left + i];
-    // Menyalin data ke array sementara R[] (kanan)
+    // Salin elemen ke array kanan (R)
     for (int j = 0; j < n2; j++)
         R[j] = arr[mid + 1 + j];
 
-    // Inisialisasi indeks untuk iterasi
-    int i = 0;   // Indeks awal subarray kiri
-    int j = 0;   // Indeks awal subarray kanan
-    int k = left; // Indeks awal subarray yang akan digabungkan
+    // Inisialisasi indeks awal untuk tiap array
+    int i = 0;       // Indeks untuk L
+    int j = 0;       // Indeks untuk R
+    int k = left;    // Indeks untuk posisi gabungan di arr
 
-    // Menggabungkan array L dan R kembali ke arr[]
+    // Proses penggabungan dua array (L dan R) secara terurut
     while (i < n1 && j < n2) {
-        // Memilih elemen yang lebih kecil dari kedua subarray
+        // Bandingkan elemen dari L dan R, ambil yang lebih kecil dulu
         if (L[i] <= R[j]) {
-            arr[k] = L[i];  // Masukkan elemen dari subarray kiri
-            i++;            // Pindah ke elemen berikutnya di kiri
+            arr[k] = L[i];  // Masukkan elemen dari L ke arr
+            i++;            // Geser indeks L ke elemen berikutnya
         } else {
-            arr[k] = R[j];  // Masukkan elemen dari subarray kanan
-            j++;            // Pindah ke elemen berikutnya di kanan
+            arr[k] = R[j];  // Masukkan elemen dari R ke arr
+            j++;            // Geser indeks R ke elemen berikutnya
         }
-        k++;  // Pindah ke posisi berikutnya di array utama
+        k++; // Geser posisi pada arr
     }
 
-    // Menyalin sisa elemen dari L[] jika ada
+    // Jika masih ada sisa elemen di L, salin semuanya ke arr
     while (i < n1) {
-        arr[k] = L[i];  // Salin elemen yang tersisa dari kiri
-        i++;            // Increment indeks kiri
-        k++;            // Increment indeks array utama
+        arr[k] = L[i];
+        i++;
+        k++;
     }
 
-    // Menyalin sisa elemen dari R[] jika ada
+    // Jika masih ada sisa elemen di R, salin semuanya ke arr
     while (j < n2) {
-        arr[k] = R[j];  // Salin elemen yang tersisa dari kanan
-        j++;            // Increment indeks kanan
-        k++;            // Increment indeks array utama
+        arr[k] = R[j];
+        j++;
+        k++;
     }
 }
 
-// Fungsi utama merge sort yang menggunakan divide and conquer
+// =======================
+// Fungsi rekursif utama untuk Merge Sort
+// =======================
 void mergeSort(vector<int>& arr, int left, int right) {
-   
-    // Base case: jika subarray hanya memiliki 1 elemen atau kurang
+    // Base case: jika hanya ada satu elemen atau tidak ada sama sekali
     if (left >= right)
-        return;  // Tidak perlu diurutkan
+        return; // Tidak perlu diurutkan
 
-    // Mencari titik tengah untuk membagi array
+    // Cari titik tengah dari array
     int mid = left + (right - left) / 2;
 
-    // Rekursi: mengurutkan separuh kiri array
-    mergeSort(arr, left, mid);
-    // Rekursi: mengurutkan separuh kanan array
-    mergeSort(arr, mid + 1, right);
-   
-    // Menggabungkan dua subarray yang sudah terurut
+    // Rekursif: urutkan bagian kiri dan kanan
+    mergeSort(arr, left, mid);       // Urutkan sisi kiri
+    mergeSort(arr, mid + 1, right);  // Urutkan sisi kanan
+
+    // Gabungkan kedua sisi yang sudah terurut
     merge(arr, left, mid, right);
 }
 
-// Fungsi untuk mencetak array
+// =======================
+// Fungsi untuk mencetak isi array
+// =======================
 void printArray(const vector<int>& arr) {
-    // Iterasi melalui semua elemen array
     for (int i = 0; i < arr.size(); i++) {
-        cout << arr[i] << " ";  // Cetak setiap elemen diikuti spasi
+        cout << arr[i] << " ";  // Cetak elemen diikuti spasi
     }
-    cout << endl;  // Pindah ke baris baru setelah selesai
+    cout << endl;
 }
 
+// =======================
 // Fungsi utama program
+// =======================
 int main() {
-    int n;  // Variabel untuk menyimpan jumlah elemen
-    cout << "Masukkan jumlah elemen data: ";  // Prompt input
-    cin >> n;  // Membaca jumlah elemen dari user
-   
-    vector<int> data(n);  // Membuat vector dengan ukuran n
-    cout << "Masukkan elemen-elemen data: ";  // Prompt input
-    // Loop untuk membaca setiap elemen data
+    int n;  // Menyimpan jumlah elemen array
+    cout << "Masukkan jumlah elemen data: ";
+    cin >> n;  // Input jumlah elemen dari user
+
+    // Buat vector dengan ukuran n
+    vector<int> data(n);
+
+    cout << "Masukkan elemen-elemen data: ";
+    // Input setiap elemen array
     for (int i = 0; i < n; i++) {
-        cin >> data[i];  // Membaca elemen ke-i
+        cin >> data[i];
     }
-   
-    // Menampilkan array sebelum diurutkan
+
+    // Tampilkan data sebelum diurutkan
     cout << "Array sebelum diurutkan: ";
-    printArray(data);  // Memanggil fungsi printArray
-   
-    // Memanggil mergeSort untuk mengurutkan array
-    mergeSort(data, 0, n - 1);  // Parameter: array, indeks awal, indeks akhir
-   
-    // Menampilkan array setelah diurutkan
+    printArray(data);
+
+    // Proses pengurutan dengan Merge Sort
+    mergeSort(data, 0, n - 1);
+
+    // Tampilkan data setelah diurutkan
     cout << "Array setelah diurutkan: ";
-    printArray(data);  // Memanggil fungsi printArray
-   
-    return 0;
+    printArray(data);
+
+    return 0;  // Program selesai
 }
